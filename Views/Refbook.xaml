@@ -39,21 +39,14 @@
                         </StackPanel>
                         <ScrollViewer HorizontalScrollBarVisibility="Disabled"  Grid.Column="1">
                             <StackPanel>
-                                <uc:FormIndexControl ReadOnly="True">
-                                    <uc:FormIndexControl.Resources>
-                                        <Style TargetType="uc:FormIndexControl">
-                                            <Setter Property="ShortName" Value="{Binding DataContext.InfoSelectedIndex[0], RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Window}}}"/>
-                                            <Setter Property="FullName" Value="{Binding DataContext.InfoSelectedIndex[1], RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Window}}}"/>
-                                            <Setter Property="Group" Value="{Binding DataContext.InfoSelectedIndex[2], RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Window}}}"/>
-                                            <Setter Property="Measure" Value="{Binding DataContext.InfoSelectedIndex[3], RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Window}}}"/>
-                                            <Setter Property="IndexFormula" Value="{Binding DataContext.InfoSelectedIndex[4], RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Window}}}"/>
-                                            <Setter Property="Description" Value="{Binding DataContext.InfoSelectedIndex[5], RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Window}}}"/>
-                                            <Setter Property="EquipMeasure" Value="{Binding DataContext.InfoSelectedIndex[6], RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Window}}}"/>
-                                            <Setter Property="Average" Value="{Binding DataContext.InfoSelectedIndex[7], RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Window}}}"/>
-                                            <Setter Property="AdditionalInfo" Value="{Binding DataContext.InfoSelectedIndex[8], RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Window}}}"/>
-                                        </Style>
-                                    </uc:FormIndexControl.Resources>
-                                </uc:FormIndexControl>
+                                <StackPanel.Resources>
+                                    <ResourceDictionary>
+                                        <ResourceDictionary.MergedDictionaries>
+                                            <ResourceDictionary Source="BindingFormIndexControl.xaml"/>
+                                        </ResourceDictionary.MergedDictionaries>
+                                    </ResourceDictionary>
+                                </StackPanel.Resources>
+                                <uc:FormIndexControl ReadOnly="True" Style="{StaticResource BindingControl}"/>
                                 <Label Content="Где используется"/>
                                 <ItemsControl Name="DependIndicesICtrl" Height="auto" ItemsSource="{Binding Path=UsingIndicesList}">
                                     <ItemsControl.ItemsPanel>

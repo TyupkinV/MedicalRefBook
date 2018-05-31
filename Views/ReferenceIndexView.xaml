@@ -4,8 +4,19 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:MedicalRefbook2_0.Views"
+        xmlns:uc="clr-namespace:UControls"
         mc:Ignorable="d"
         Title="ReferenceIndexView" Height="450" Width="400">
     <Grid>
+        <ScrollViewer HorizontalScrollBarVisibility="Disabled">
+            <StackPanel>
+                <StackPanel.Resources>
+                    <ResourceDictionary Source="ResourceInfoIndex.xaml"/>
+                </StackPanel.Resources>
+                <uc:FormIndexControl ReadOnly="True"/>
+                <ItemsControl ItemsSource="{Binding Path=UsingIndicesList}" ItemsPanel="{StaticResource WrappingButton}"/>
+                <ItemsControl ItemsSource="{Binding Path=DependIndicesList}" ItemsPanel="{StaticResource WrappingButton}"/>
+            </StackPanel>
+        </ScrollViewer>
     </Grid>
 </Window>
