@@ -13,7 +13,7 @@
                 <StackPanel.Resources>
                     <ResourceDictionary Source="ResourceInfoIndex.xaml"/>
                 </StackPanel.Resources>
-                <uc:FormIndexControl ReadOnly="True"/>
+                <uc:FormIndexControl ReadOnly="True" Style="{StaticResource BindingControl}"/>
                 <ItemsControl ItemsSource="{Binding Path=UsingIndicesList}" ItemsPanel="{StaticResource WrappingButton}"/>
                 <ItemsControl ItemsSource="{Binding Path=DependIndicesList}" ItemsPanel="{StaticResource WrappingButton}"/>
             </StackPanel>
