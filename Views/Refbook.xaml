@@ -42,27 +42,15 @@
                                 <StackPanel.Resources>
                                     <ResourceDictionary>
                                         <ResourceDictionary.MergedDictionaries>
-                                            <ResourceDictionary Source="BindingFormIndexControl.xaml"/>
+                                            <ResourceDictionary Source="ResourceInfoIndex.xaml"/>
                                         </ResourceDictionary.MergedDictionaries>
                                     </ResourceDictionary>
                                 </StackPanel.Resources>
                                 <uc:FormIndexControl ReadOnly="True" Style="{StaticResource BindingControl}"/>
                                 <Label Content="Где используется"/>
-                                <ItemsControl Name="DependIndicesICtrl" Height="auto" ItemsSource="{Binding Path=UsingIndicesList}">
-                                    <ItemsControl.ItemsPanel>
-                                        <ItemsPanelTemplate>
-                                            <WrapPanel/>
-                                        </ItemsPanelTemplate>
-                                    </ItemsControl.ItemsPanel>
-                                </ItemsControl>
+                                <ItemsControl Name="DependIndicesICtrl" Height="auto" ItemsSource="{Binding Path=UsingIndicesList}" ItemsPanel="{StaticResource WrappingButton}"/>
                                 <Label Content="От чего зависит" />
-                                <ItemsControl Name="UsingIndicesICtrl" Height="auto" ItemsSource="{Binding Path=DependIndicesList}">
-                                    <ItemsControl.ItemsPanel>
-                                        <ItemsPanelTemplate>
-                                            <WrapPanel/>
-                                        </ItemsPanelTemplate>
-                                    </ItemsControl.ItemsPanel>
-                                </ItemsControl>
+                                <ItemsControl Name="UsingIndicesICtrl" Height="auto" ItemsSource="{Binding Path=DependIndicesList}" ItemsPanel="{StaticResource WrappingButton}"/>
                             </StackPanel>
                         </ScrollViewer>
                     </Grid>

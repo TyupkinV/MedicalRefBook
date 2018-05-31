@@ -66,7 +66,6 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
-    <Compile Include="Models\ReferenceIndexModel.cs" />
     <Compile Include="ModelViews\ReferenceIndexModelView.cs" />
     <Compile Include="Views\ReferenceIndexView.xaml.cs">
       <DependentUpon>ReferenceIndexView.xaml</DependentUpon>
@@ -79,7 +78,7 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Views\BindingFormIndexControl.xaml">
+    <Page Include="Views\ResourceInfoIndex.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

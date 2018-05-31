@@ -12,12 +12,12 @@ namespace MedicalRefbook2_0.Models {
     public class RefbookModel {
 
         public DataSet AllData { get; set; } = new DataSet();
-        public RefbookModelView MainWindowMV { get; set; }
+        public RefbookModelView RefbookMV { get; set; }
 
         public string ConnectionString { get; } = Settings.Default.Host + ";" + Settings.Default.User + ";" + Settings.Default.Password + ";" + Settings.Default.Database + ";";
 
-        public RefbookModel(RefbookModelView mainWindowModelView) {
-            MainWindowMV = mainWindowModelView;
+        public RefbookModel(RefbookModelView refbookModelView) {
+            RefbookMV = refbookModelView;
         }
 
         public DataSet CreateHierarchy() {
@@ -47,12 +47,12 @@ namespace MedicalRefbook2_0.Models {
         }
 
         // Отступ от MVVM #1
-        public Tuple<List<string>, List<Button>, List<Button>> InfoSelectIndex(string selectedItem, DataSet allData) {
+        public static Tuple<List<string>, List<Button>, List<Button>> InfoSelectIndex(object selectedItem, DataSet allData) {
 
             var infoIndexQuery = from index in allData.Tables["Refbook"].AsEnumerable()
                                     from type in allData.Tables["TypesOfIndex"].AsEnumerable()
                                     where (int)index["IDTypeIndex"] == (int)type["IDType"]
-                                    where (string)index["ShortName"] == selectedItem
+                                    where (string)index["ShortName"] == selectedItem.ToString()
                                     select new List<string> { (string)index["ShortName"], (string)index["FullName"], (string)type["NameType"],
                                     (string)index["Measure"], (string)index["Formula"], (string)index["Description"], 
                                     (string)index["EquipForMeasure"], (string)index["AverageValue"], (string)index["AdditionalInfo"],
@@ -65,7 +65,7 @@ namespace MedicalRefbook2_0.Models {
             return new Tuple<List<string>, List<Button>, List<Button>>(infoIndexList, usingIndicesList, dependIndicesList);
         }
 
-        private List<Button> ConvertRefToButton(string referenceArray, DataSet allData) {
+        private static List<Button> ConvertRefToButton(string referenceArray, DataSet allData) {
             try {
                 List<Button> referenceButtonList = new List<Button>();
                 if (referenceArray.Length != 0) {
@@ -78,7 +78,9 @@ namespace MedicalRefbook2_0.Models {
                             Content = nameReferenseLinq.ElementAt(0)[0],
                             Height = 25,
                             Width = 100,
-                            Command = new DelegateCommand(MainWindowMV.OpenReferencePage)
+                            Command = new DelegateCommand(RefbookModelView.OpenReferencePage),
+                            CommandParameter = nameReferenseLinq.ElementAt(0)[0]
+                            
                         });
                     }
                     return referenceButtonList;
@@ -89,10 +91,6 @@ namespace MedicalRefbook2_0.Models {
                 MessageBox.Show(ex.Message);
                 return null;
             }
-        }
-
-        public void OpenReferenceIndex(object refIndex) {
-            throw new NotImplementedException();
         }
     }
 }

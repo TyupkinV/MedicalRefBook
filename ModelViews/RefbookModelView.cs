@@ -1,18 +1,19 @@
 ﻿using System.Data;
 using System.Windows.Controls;
 using System.ComponentModel;
-using System.Windows.Input;
 using System.Runtime.CompilerServices;
 using System.Collections.Generic;
-using System;
 
 namespace MedicalRefbook2_0.ModelViews {
     public class RefbookModelView : INotifyPropertyChanged {
 
-        private DataSet _hierarchyDataSet;
+        private static DataSet _hierarchyDataSet;
         private List<Button> _usingIndicesList;
         private List<Button> _dependIndicesList;
         private List<string> _infoSelectedIndexList;
+        
+        public event PropertyChangedEventHandler PropertyChanged;
+        static public event PropertyChangedEventHandler StaticPropertyChanged = delegate { };
 
         public List<Button> UsingIndicesList {
             get {
@@ -40,30 +41,45 @@ namespace MedicalRefbook2_0.ModelViews {
                 _infoSelectedIndexList = value;
                 NotifyPropertyChanged();
             }
-        }
-        public event PropertyChangedEventHandler PropertyChanged;
-        public DataSet HierarchyDataSet {
+        } 
+        public static DataSet HierarchyDataSet {
             get {
                 return _hierarchyDataSet;
             }
             set {
                 _hierarchyDataSet = value;
-                NotifyPropertyChanged();
+                OnGlobalPropertyChanged();
             }
         }
-        public Models.RefbookModel MainWindowModel { get; set; }
+        public Models.RefbookModel RefbookModel { get; set; }
 
         public RefbookModelView() {
-            MainWindowModel = new Models.RefbookModel(this);
-            HierarchyDataSet = MainWindowModel.CreateHierarchy();
+            StaticPropertyChanged += HandleStaticPropertyChanged;
+            RefbookModel = new Models.RefbookModel(this);
+            HierarchyDataSet = RefbookModel.CreateHierarchy();
         }
 
         private void NotifyPropertyChanged([CallerMemberName] string PropertyName = "") {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(PropertyName));
         }
 
-        public void OpenReferencePage(object parametr) {
-            throw new NotImplementedException();
+        public static void OpenReferencePage(object parameter) {
+            Views.ReferenceIndexView referenceIndexView = new Views.ReferenceIndexView(parameter, HierarchyDataSet);
+            referenceIndexView.Show();
         }
+
+        static void OnGlobalPropertyChanged([CallerMemberName] string propertyName = "") {
+            StaticPropertyChanged(typeof(RefbookModelView), new PropertyChangedEventArgs(propertyName));
+        }
+
+        private void HandleStaticPropertyChanged(object sender, PropertyChangedEventArgs e) {
+            switch (e.PropertyName) {
+                case "HierarchyDataSet":
+                    break;
+            }
+        }
+
+
+
     }
 }
