@@ -14,16 +14,14 @@ namespace MedicalRefbook2_0.Models {
         public DataSet AllData { get; set; } = new DataSet();
         public RefbookModelView RefbookMV { get; set; }
 
-        public string ConnectionString { get; } = Settings.Default.Host + ";" + Settings.Default.User + ";" + Settings.Default.Password + ";" + Settings.Default.Database + ";";
-
         public RefbookModel(RefbookModelView refbookModelView) {
             RefbookMV = refbookModelView;
         }
 
         public DataSet CreateHierarchy() {
-            string connStr = string.Format("Host={0};Username={1};Password={2};Database={3};", Settings.Default.Host, Settings.Default.User, Settings.Default.Password, Settings.Default.Database);
+
             try {
-                NpgsqlConnection connectDb = new NpgsqlConnection(connStr);
+                NpgsqlConnection connectDb = new NpgsqlConnection(((App)Application.Current).ConnectionString);
                 connectDb.Open();
                 string textQIndex = @"SELECT ""IDIndex"", ""IDTypeIndex"", ""ShortName"", ""FullName"", ""Measure"", ""Description"", ""EquipForMeasure"", ""AverageValue""," +
                                 @"""AdditionalInfo"", ""DependIndices"", ""UsingIndices"", ""Formula"" FROM ""Refbook""";
@@ -50,25 +48,25 @@ namespace MedicalRefbook2_0.Models {
         public static Tuple<List<string>, List<Button>, List<Button>> InfoSelectIndex(object selectedItem, DataSet allData) {
 
             var infoIndexQuery = from index in allData.Tables["Refbook"].AsEnumerable()
-                                    from type in allData.Tables["TypesOfIndex"].AsEnumerable()
-                                    where (int)index["IDTypeIndex"] == (int)type["IDType"]
-                                    where (string)index["ShortName"] == selectedItem.ToString()
-                                    select new List<string> { (string)index["ShortName"], (string)index["FullName"], (string)type["NameType"],
-                                    (string)index["Measure"], (string)index["Formula"], (string)index["Description"], 
+                                 from type in allData.Tables["TypesOfIndex"].AsEnumerable()
+                                 where (int)index["IDTypeIndex"] == (int)type["IDType"]
+                                 where (string)index["ShortName"] == selectedItem.ToString()
+                                 select new List<string> { (string)index["ShortName"], (string)index["FullName"], (string)type["NameType"],
+                                    (string)index["Measure"], (string)index["Formula"], (string)index["Description"],
                                     (string)index["EquipForMeasure"], (string)index["AverageValue"], (string)index["AdditionalInfo"],
                                     (string)index["UsingIndices"], (string)index["DependIndices"]};
 
             List<string> infoIndexList = infoIndexQuery.ElementAt(0);
             List<Button> usingIndicesList = ConvertRefToButton(infoIndexList[infoIndexList.Count - 1], allData);
             List<Button> dependIndicesList = ConvertRefToButton(infoIndexList[infoIndexList.Count - 2], allData);
-            
+
             return new Tuple<List<string>, List<Button>, List<Button>>(infoIndexList, usingIndicesList, dependIndicesList);
         }
 
         private static List<Button> ConvertRefToButton(string referenceArray, DataSet allData) {
             try {
                 List<Button> referenceButtonList = new List<Button>();
-                if (referenceArray.Length != 0) {
+                if (referenceArray.Length != 0 && !referenceArray.Equals("-")) {
                     string[] arrStrRef = referenceArray.Split(',');
                     foreach (string i in arrStrRef) {
                         var nameReferenseLinq = from index in allData.Tables["Refbook"].AsEnumerable()
@@ -80,7 +78,7 @@ namespace MedicalRefbook2_0.Models {
                             Width = 100,
                             Command = new DelegateCommand(RefbookModelView.OpenReferencePage),
                             CommandParameter = nameReferenseLinq.ElementAt(0)[0]
-                            
+
                         });
                     }
                     return referenceButtonList;
@@ -93,4 +91,4 @@ namespace MedicalRefbook2_0.Models {
             }
         }
     }
-}
+}       

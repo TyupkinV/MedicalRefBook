@@ -1,6 +1,8 @@
 ﻿using System.Windows;
 using System.Windows.Controls;
-
+using System.Windows.Input;
+using System.Collections.Generic;
+using System.Data;
 
 namespace UControls {
 
@@ -80,6 +82,43 @@ namespace UControls {
         }
         public static readonly DependencyProperty ReadOnlyProperty =
             DependencyProperty.Register("ReadOnly", typeof(bool), typeof(FormIndexControl), new FrameworkPropertyMetadata(defaultValue: true));
+
+        public ICommand EditorFormula {
+            get { return (ICommand)GetValue(EditorFormulaProperty); }
+            set { SetValue(EditorFormulaProperty, value); }
+        }
+        public static readonly DependencyProperty EditorFormulaProperty =
+            DependencyProperty.Register("EditorFormula", typeof(ICommand), typeof(FormIndexControl), null);
+
+        public List<string> ListGroup {
+            get { return (List<string>)GetValue(ListGroupProperty); }
+            set { SetValue(ListGroupProperty, value); }
+        }
+        public static readonly DependencyProperty ListGroupProperty =
+            DependencyProperty.Register("ListGroup", typeof(List<string>), typeof(FormIndexControl), null);
+
+        public string SelectedGroup {
+            get { return (string)GetValue(SelectedGroupProperty); }
+            set { SetValue(SelectedGroupProperty, value); }
+        }
+
+        public static readonly DependencyProperty SelectedGroupProperty =
+            DependencyProperty.Register("SelectedGroup", typeof(string), typeof(FormIndexControl), new PropertyMetadata("-"));
+
+        public Visibility CommentIndex {
+            get { return (Visibility)GetValue(CommentIndexProperty); }
+            set { SetValue(CommentIndexProperty, value); }
+        }
+        public static readonly DependencyProperty CommentIndexProperty =
+            DependencyProperty.Register("CommentIndex", typeof(Visibility), typeof(FormIndexControl), new PropertyMetadata(defaultValue:Visibility.Collapsed));
+
+        public List<string> ArrayComment {
+            get { return (List<string>)GetValue(ArrayCommentProperty); }
+            set { SetValue(ArrayCommentProperty, value); }
+        }
+        public static readonly DependencyProperty ArrayCommentProperty =
+            DependencyProperty.Register("ArrayComment", typeof(List<string>), typeof(FormIndexControl),
+                                        new PropertyMetadata(defaultValue:new List<string> {"-", "-", "-", "-", "-", "-", "-", "-", "-" }));
 
         #endregion
 

@@ -1,18 +1,16 @@
 ﻿using System.Windows;
-using MedicalRefbook2_0.Models;
-using MedicalRefbook2_0.ModelViews;
-using MedicalRefbook2_0.Views;
+using MedicalRefbook2_0.Properties;
 
 namespace MedicalRefbook2_0
 {
     public partial class App : Application
     {
-        public Authentification AuthV{ get; set; }
-
+        public Views.Auth AuthV{ get; set; }
+        public string ConnectionString { get; set; } = string.Format("Host={0};Username={1};Password={2};Database={3};", Settings.Default.Host, Settings.Default.User, Settings.Default.Password, Settings.Default.Database);
         protected override void OnStartup(StartupEventArgs e)
         {
             base.OnStartup(e);
-            AuthV = new Authentification();
+            AuthV = new Views.Auth();
             AuthV.Show();
         }
     }

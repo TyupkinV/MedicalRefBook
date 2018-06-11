@@ -8,7 +8,6 @@ using System;
 namespace MedicalRefbook2_0.ModelViews
 {
     public class ReferenceIndexModelView : INotifyPropertyChanged{
-
         private List<Button> _usingIndicesList;
         private List<Button> _dependIndicesList;
         private List<string> _infoSelectedIndexList;

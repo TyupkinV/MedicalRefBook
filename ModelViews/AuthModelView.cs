@@ -3,6 +3,7 @@ using System.Windows;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
 using System.Windows.Input;
+using System.Collections.Generic;
 using MedicalRefbook2_0;
 
 namespace MedicalRefbook2_0.ModelViews
@@ -10,9 +11,12 @@ namespace MedicalRefbook2_0.ModelViews
     public class AuthModelView : INotifyPropertyChanged
     {
         private bool _IsAuth = false;
+        private string _selectedServer = "Локальный";
 
         public string Username { get; set; } = "postgres";
         public string Password { get; set; } = "root";
+        public List<string> TypeServer { get; } = new List<string> { "Локальный", "Удаленный" };
+        public string SelectedServer { get { return _selectedServer; } set { _selectedServer = value; NotifyPropertyChanged(); } }
         public Models.AuthModel AuthModelP { get; set; }
         public ICommand AuthCommand { get; private set; }
         public ICommand ExitCommand { get; private set; }
@@ -33,7 +37,7 @@ namespace MedicalRefbook2_0.ModelViews
 
         private void ExitUser(object obj)
         {
-            throw new NotImplementedException();
+            Application.Current.Windows[0].Close();
         }
 
         private bool CanClickLogin(object arg)

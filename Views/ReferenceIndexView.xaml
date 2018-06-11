@@ -7,13 +7,26 @@
         xmlns:uc="clr-namespace:UControls"
         mc:Ignorable="d"
         Title="ReferenceIndexView" Height="450" Width="400">
+    <Window.Resources>
+        <Style x:Key="BindingControlLoc" TargetType="uc:FormIndexControl">
+            <Setter Property="ShortName" Value="{Binding DataContext.InfoSelectedIndex[0], RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Window}}}"/>
+            <Setter Property="FullName" Value="{Binding DataContext.InfoSelectedIndex[1], RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Window}}}"/>
+            <Setter Property="Group" Value="{Binding DataContext.InfoSelectedIndex[2], RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Window}}}"/>
+            <Setter Property="Measure" Value="{Binding DataContext.InfoSelectedIndex[3], RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Window}}}"/>
+            <Setter Property="IndexFormula" Value="{Binding DataContext.InfoSelectedIndex[4], RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Window}}}"/>
+            <Setter Property="Description" Value="{Binding DataContext.InfoSelectedIndex[5], RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Window}}}"/>
+            <Setter Property="EquipMeasure" Value="{Binding DataContext.InfoSelectedIndex[6], RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Window}}}"/>
+            <Setter Property="Average" Value="{Binding DataContext.InfoSelectedIndex[7], RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Window}}}"/>
+            <Setter Property="AdditionalInfo" Value="{Binding DataContext.InfoSelectedIndex[8], RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Window}}}"/>
+        </Style>
+    </Window.Resources>
     <Grid>
         <ScrollViewer HorizontalScrollBarVisibility="Disabled">
             <StackPanel>
                 <StackPanel.Resources>
                     <ResourceDictionary Source="ResourceInfoIndex.xaml"/>
                 </StackPanel.Resources>
-                <uc:FormIndexControl ReadOnly="True" Style="{StaticResource BindingControl}"/>
+                <uc:FormIndexControl ReadOnly="True" Style="{StaticResource BindingControlLoc}"/>
                 <ItemsControl ItemsSource="{Binding Path=UsingIndicesList}" ItemsPanel="{StaticResource WrappingButton}"/>
                 <ItemsControl ItemsSource="{Binding Path=DependIndicesList}" ItemsPanel="{StaticResource WrappingButton}"/>
             </StackPanel>

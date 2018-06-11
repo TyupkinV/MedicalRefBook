@@ -3,18 +3,21 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:sys="clr-namespace:System;assembly=mscorlib"
         xmlns:local="clr-namespace:MedicalRefbook2_0"
+        xmlns:cnv="clr-namespace:MedicalRefbook2_0.ModelViews"
         xmlns:uc="clr-namespace:UControls"
+        xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
         mc:Ignorable="d"
-        Title="MainWindow" Height="450" Width="800">
+        Title="MainWindow" Height="560" Width="600">
     <Grid>
         <Grid>
             <Grid.RowDefinitions>
                 <RowDefinition Height="1*"/>
                 <RowDefinition Height="25"/>
             </Grid.RowDefinitions>
-            <TabControl Grid.Row="0">
-            <TabItem Header="Справочник">
+            <TabControl Grid.Row="0" SelectedItem="0" SelectedIndex="{Binding RefbookMV.ActiveTabItem, Mode=TwoWay}">
+            <TabItem Name="RefbookTabItem" Header="Справочник">
                     <Grid>
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="0.3*"/>
@@ -46,26 +49,71 @@
                                         </ResourceDictionary.MergedDictionaries>
                                     </ResourceDictionary>
                                 </StackPanel.Resources>
-                                <uc:FormIndexControl ReadOnly="True" Style="{StaticResource BindingControl}"/>
+                                <uc:FormIndexControl ReadOnly="True" CommentIndex="Collapsed" Style="{StaticResource BindingControl}"/>
                                 <Label Content="Где используется"/>
                                 <ItemsControl Name="DependIndicesICtrl" Height="auto" ItemsSource="{Binding Path=UsingIndicesList}" ItemsPanel="{StaticResource WrappingButton}"/>
                                 <Label Content="От чего зависит" />
                                 <ItemsControl Name="UsingIndicesICtrl" Height="auto" ItemsSource="{Binding Path=DependIndicesList}" ItemsPanel="{StaticResource WrappingButton}"/>
+                                <Button Content="Изменить показатель" Command="{Binding EditIndexTab}"/>
                             </StackPanel>
                         </ScrollViewer>
                     </Grid>
                 </TabItem>
             <TabItem Header="Граф" >
 
+            </TabItem> 
+            <TabItem Name="RequestUserTabItem" Header="Новая заявка">
+                <i:Interaction.Triggers>
+                    <i:EventTrigger EventName="MouseLeftButtonDown">
+                            <i:InvokeCommandAction Command="{Binding RefbookMV.NewIndexTab}"/>
+                    </i:EventTrigger>
+                </i:Interaction.Triggers>
+                <Grid>
+                <Grid.ColumnDefinitions>
+                        <ColumnDefinition/>
+                    </Grid.ColumnDefinitions>
+                        <uc:FormIndexControl Margin="2,2,2,63" 
+                                         CommentIndex="{Binding DataContext.CommVisibility, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type TabItem}}, Mode=TwoWay}"
+                                         ReadOnly="False" EditorFormula="{Binding DataContext.CommandOpenEditor, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type TabItem}}, Mode=TwoWay}"
+                                         ShortName="{Binding DataContext.NewIndex[0], RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type TabItem}}, Mode=TwoWay}"
+                                         FullName="{Binding DataContext.NewIndex[1], RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type TabItem}}, Mode=TwoWay}"
+                                         ListGroup="{Binding DataContext.GroupsIndex, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type TabItem}}, Mode=TwoWay}"
+                                         SelectedGroup="{Binding DataContext.NewIndex[2], RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type TabItem}}, Mode=TwoWay}"
+                                         Measure="{Binding DataContext.NewIndex[3], RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type TabItem}}, Mode=TwoWay}"
+                                         IndexFormula="{Binding DataContext.NewIndex[4], RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type TabItem}}, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                                         Description="{Binding DataContext.NewIndex[5], RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type TabItem}}, Mode=TwoWay}"
+                                         EquipMeasure="{Binding DataContext.NewIndex[6], RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type TabItem}}, Mode=TwoWay}"
+                                         Average="{Binding DataContext.NewIndex[7], RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type TabItem}}, Mode=TwoWay}"
+                                         AdditionalInfo="{Binding DataContext.NewIndex[8], RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type TabItem}}, Mode=TwoWay}">
+                            <!--<uc:FormIndexControl.Triggers>
+                                <DataTrigger Binding="{Binding IndexFormula}" Value="{x:Static sys:String.Empty}">
+                                    <Setter Property="IndexFormula"  Value="Нажмите для редактирования."/>
+                                </DataTrigger>
+                            </uc:FormIndexControl.Triggers>-->
+                        </uc:FormIndexControl>
+                    <Button Content="Отправить" Width="100" Height="25" VerticalAlignment="Bottom" HorizontalAlignment="Left" Command="{Binding CommandRequest}"/>
+                </Grid>
             </TabItem>
-            <TabItem Header="Новая запись">
-
-            </TabItem>
-            <TabItem Header="Заявки">
+            <TabItem Name="AllRequestTabItem" Header="Заявки">
 
             </TabItem>
         </TabControl>
-        <Button Name="Settings" Content="Настройки" Grid.Row="1" HorizontalAlignment="Right" Width="100"/>
+            <WrapPanel Grid.Row="1">
+                <WrapPanel.Resources>
+                    <Style x:Key="localStyle">
+                        <Setter Property="Control.Margin" Value="2"/>
+                    </Style>
+                </WrapPanel.Resources>
+                <Button Content="Настройки" Width="80" Style="{StaticResource localStyle}"/>
+                <Button Content="Обновить"  Width="80" Style="{StaticResource localStyle}"/>
+                <TextBlock Text="Показателей в справочнике:" Style="{StaticResource localStyle}"/>
+                <TextBlock Text="5" Style="{StaticResource localStyle}" FontWeight="Bold"/>
+                <TextBlock Text="Пользователь:" Style="{StaticResource localStyle}"/>
+                <TextBlock Text="Иван Иванов" Style="{StaticResource localStyle}" FontWeight="Bold"/>
+                <Button Content="Выйти"  Width="80" Style="{StaticResource localStyle}"/>
+
+            </WrapPanel>
+
         </Grid>
     </Grid>
 </Window>
