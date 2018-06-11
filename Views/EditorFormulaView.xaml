@@ -1,0 +1,150 @@
+﻿<Window x:Class="MedicalRefbook2_0.Views.EditorFormulaView"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:wpfm="clr-namespace:WpfMath.Controls;assembly=WpfMath"
+        xmlns:local="clr-namespace:MedicalRefbook2_0.Views"
+        xmlns:local2="clr-namespace:MedicalRefbook2_0.ModelViews"
+        xmlns:sys="clr-namespace:System;assembly=mscorlib"
+        xmlns:componentmodel="clr-namespace:System.ComponentModel;assembly=WindowsBase"
+        mc:Ignorable="d"
+        Title="Конструктор формул" Height="340" Width="420" ResizeMode="CanResize" MinHeight="340" MaxHeight="340" MinWidth="420">
+    <Window.Resources>
+        <local2:MultiplyCommandParameter x:Key="ConverterMultiply"/>
+        <local2:ConvertConditonalInput x:Key="ConverterConditionInput"/>
+    </Window.Resources>
+    <Grid>
+        <Grid Grid.Column="0" Background="LightGray">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="25"/>
+                <RowDefinition Height="0.20*"/>
+                <RowDefinition Height="20"/>
+                <RowDefinition Height="0.25*"/>
+                <RowDefinition Height="0.43*"/>
+            </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+            </Grid.ColumnDefinitions>
+            <Label Grid.Row="0" Content="Формула:"/>
+            <wpfm:FormulaControl Name="ResultView" Grid.Row="1" Background="White">
+                <wpfm:FormulaControl.Formula>
+                    <MultiBinding StringFormat="{}{0} {1}">
+                        <Binding Path="ResultFormula"/>
+                        <Binding Path="ManualInput"/>
+                    </MultiBinding>
+                </wpfm:FormulaControl.Formula>
+            </wpfm:FormulaControl>
+            <TextBox Name="MsgErr" Grid.Row="2" Height="20" VerticalAlignment="Bottom" IsReadOnly="True" Text="Поле вывода ошибок ввода" Background="LightGray" />
+            <ListBox Name="InputUserLBox" Grid.Row="3" Background="White" Margin="0 0 62 0" SelectionMode="Multiple" ItemsSource="{Binding Path=UsingIndex, Mode=TwoWay}">
+                <ListBox.ItemsPanel>
+                    <ItemsPanelTemplate>
+                        <WrapPanel IsItemsHost="True"/>
+                    </ItemsPanelTemplate>
+                </ListBox.ItemsPanel>
+            </ListBox>
+<!--Debug--><TextBox Visibility="Visible" Grid.Row="3" Height="25" VerticalAlignment="Bottom" Text="{Binding ManualInput, Mode=OneWayToSource, UpdateSourceTrigger=PropertyChanged}"/>
+            <Button Name="NextStateFormulaBtn" Content="&#129094;" Grid.Row="3" Height="30" Width="30" HorizontalAlignment="Right" 
+                    VerticalAlignment="Top" Margin="3" Command="{Binding ChangeState}" CommandParameter="NextState"/>
+            <Button Name="PrevStateFormulaBtn" Content="&#129092;" Grid.Row="3" Height="30" Width="30" HorizontalAlignment="Right"
+                    VerticalAlignment="Top" Margin="3 3 31 3" Command="{Binding ChangeState}" CommandParameter="PrevState"/>
+            <Grid Grid.Row="4">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="1*"/>
+                    <ColumnDefinition Width="250"/>
+                </Grid.ColumnDefinitions>
+                <WrapPanel Name="ElementsInput"  Grid.Column="0" VerticalAlignment="Top" HorizontalAlignment="Left" Margin="5">
+                    <WrapPanel.Resources>
+                        <Style TargetType="Button">
+                            <Setter Property="Width" Value="30" />
+                            <Setter Property="Height" Value="30" />
+                            <Setter Property="FontSize" Value="16"/>
+                        </Style>
+                    </WrapPanel.Resources>
+                    <Button Content="&#8730;" Command="{Binding OpenDialogBoxCommand}" CommandParameter="Степень корня:"/>
+                    <Button Content="x&#8319;" Command="{Binding OpenDialogBoxCommand}" CommandParameter="Степень:"/>
+                    <Button Content="x&#8345;" Command="{Binding OpenDialogBoxCommand}" CommandParameter="Индекс:"/>
+                    <Button Content="&#8725;" Command="{Binding FracCommand}"/>
+                    <Button Content="&#8721;" Command="{Binding OpenDialogBoxCommand}" CommandParameter="sum"/>
+                    <Button Content="&#8747;" Command="{Binding OpenDialogBoxCommand}" CommandParameter="int"/>
+                    <Button Content="+" Command="{Binding PlusMinusMultiplBrackCommand}" CommandParameter="+"/>
+                    <Button Content="-" Command="{Binding PlusMinusMultiplBrackCommand}" CommandParameter="-"/>
+                    <Button Content="*" Command="{Binding PlusMinusMultiplBrackCommand}" CommandParameter="*"/>
+                    <Button Content="(" Command="{Binding PlusMinusMultiplBrackCommand}" CommandParameter="("/>
+                    <Button Content=")" Command="{Binding PlusMinusMultiplBrackCommand}" CommandParameter=")"/>
+                </WrapPanel>
+                <StackPanel Grid.Column="1" Width="180" HorizontalAlignment="Right" VerticalAlignment="Top" Height="150">
+                    <StackPanel.Resources>
+                        <Style TargetType="ComboBoxItem">
+                            <Setter Property="ToolTipService.InitialShowDelay" Value="1000" />
+                        </Style>
+                    </StackPanel.Resources>
+                    <Label Grid.Row="4" Content="Список индексов:"/>
+                    <ComboBox Name="IndicesDbCmbBx" Grid.Row="4" Height="20" Width="100" Margin="5 0 0 0" IsSynchronizedWithCurrentItem="True"
+                          HorizontalAlignment="Left" ItemsSource="{Binding}" SelectedValue="{Binding DataContext.SelectedDbIndex, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Window}}}" SelectedValuePath="Sname">
+                        <ComboBox.DataContext>
+                            <CollectionViewSource Source="{Binding Path=DbIndex, Mode=TwoWay}">
+                                <CollectionViewSource.SortDescriptions>
+                                    <componentmodel:SortDescription PropertyName="Sname"/>
+                                </CollectionViewSource.SortDescriptions>
+                            </CollectionViewSource>
+                        </ComboBox.DataContext>
+                        <ComboBox.ItemTemplate>
+                            <DataTemplate>
+                                <TextBlock Text="{Binding Path=Sname}" ToolTip="{Binding Path=Fname}"></TextBlock>
+                            </DataTemplate>
+                        </ComboBox.ItemTemplate>
+                    </ComboBox>
+                    <Label Grid.Row="4" Content="Пользовательские индексы:"/>
+                    <ComboBox Name="IndicesUserCmbBx" Grid.Row="4" Height="20" Width="100" Margin="5 0 0 0 " ItemsSource="{Binding}" IsSynchronizedWithCurrentItem="True"
+                          SelectedValue="{Binding DataContext.SelectedUserIndex, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Window}}}" 
+                          SelectedValuePath="Sname" HorizontalAlignment="Left" >
+                        <ComboBox.DataContext>
+                            <CollectionViewSource Source="{Binding Path=UserIndex}">
+                                <CollectionViewSource.SortDescriptions>
+                                    <componentmodel:SortDescription PropertyName="Sname"/>
+                                </CollectionViewSource.SortDescriptions>
+                            </CollectionViewSource>
+                        </ComboBox.DataContext>
+                        <ComboBox.ItemTemplate>
+                            <DataTemplate>
+                                <TextBlock Text="{Binding Path=Sname}" ToolTip="{Binding Path=Fname}"></TextBlock>
+                            </DataTemplate>
+                        </ComboBox.ItemTemplate>
+                    </ComboBox>
+                    <WrapPanel>
+                        <Button Content="Принять" Margin="5" Width="80" Command="{Binding CommandCommit}"/>
+                        <Button Content="Отменить" Margin="5" Width="80" Command="{Binding CommandCancel}"/>
+                    </WrapPanel>
+                </StackPanel>
+            </Grid>
+        </Grid>
+        <!--DialogGrid-->
+        <Grid Name="DialogBox" Visibility="{Binding Path=StatementDialogBox}" Grid.Column="0">
+            <Rectangle Grid.Column="0" Fill="Black" Opacity="0.4"></Rectangle>
+            <StackPanel Grid.Column="0" VerticalAlignment="Center" HorizontalAlignment="Center" Background="White">
+                <StackPanel.Resources>
+                    <Style TargetType="{x:Type Control}">
+                        <Setter Property="Margin" Value="4" />
+                    </Style>
+                </StackPanel.Resources>
+                <Label Name="UpperTextLabel" Content="{Binding LabelDialogBox}"/>
+                <TextBox Name="UpperTextBox" Text="{Binding ValueDialogBox}" Width="100" Height="20"/>
+                <Button Name="OkButton" Content="Ok" Width="100" Height="20" Command="{Binding CloseDialogBoxCommand}">
+                    <Button.Resources>
+                        <sys:String x:Key="OkStr">Ok</sys:String>
+                    </Button.Resources>
+                    <Button.CommandParameter>
+                        <MultiBinding Converter="{StaticResource ConverterMultiply}">
+                            <Binding Source="{StaticResource OkStr}"/>
+                            <Binding ElementName="UpperTextLabel" Path="Content" Mode="TwoWay"/>
+                            <Binding ElementName="UpperTextBox" Path="Text" Mode="TwoWay"/>
+                            <Binding ElementName="InputUserLBox" Path="SelectedItems"/>
+                            <Binding ElementName="InputUserLBox" Path="SelectedIndices"/>
+                        </MultiBinding>
+                    </Button.CommandParameter>
+                </Button>
+                <Button Name="CancelButton"  Content="Отмена" Width="100" Height="20"  Command="{Binding CloseDialogBoxCommand}" CommandParameter="Cancel"/>
+            </StackPanel>
+        </Grid>
+    </Grid>
+</Window>

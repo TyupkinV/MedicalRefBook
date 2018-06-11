@@ -66,7 +66,15 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="Models\EditorFormulaModel.cs" />
+    <Compile Include="Models\RequestUserModel.cs" />
+    <Compile Include="ModelViews\AllRequestUserModelView.cs" />
+    <Compile Include="ModelViews\RequestUserModelView.cs" />
+    <Compile Include="ModelViews\EditorFormulaModelView.cs" />
     <Compile Include="ModelViews\ReferenceIndexModelView.cs" />
+    <Compile Include="Views\EditorFormulaView.xaml.cs">
+      <DependentUpon>EditorFormulaView.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Views\ReferenceIndexView.xaml.cs">
       <DependentUpon>ReferenceIndexView.xaml</DependentUpon>
     </Compile>
@@ -74,7 +82,15 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Views\Authentification.xaml">
+    <Page Include="Views\GeneralStyle.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\Auth.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\EditorFormulaView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -99,8 +115,8 @@
     <Compile Include="ModelViews\AuthModelView.cs" />
     <Compile Include="ModelViews\RefbookModelView.cs" />
     <Compile Include="Settings.cs" />
-    <Compile Include="Views\Authentification.xaml.cs">
-      <DependentUpon>Authentification.xaml</DependentUpon>
+    <Compile Include="Views\Auth.xaml.cs">
+      <DependentUpon>Auth.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\Refbook.xaml.cs">
       <DependentUpon>Refbook.xaml</DependentUpon>
