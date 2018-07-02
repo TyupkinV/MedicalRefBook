@@ -6,14 +6,20 @@ using System.Runtime.CompilerServices;
 using System.Windows;
 using System.Linq;
 using System.Data;
-using System.Windows.Data;
-using System.Globalization;
+using System.Collections.ObjectModel;
 
 namespace MedicalRefbook2_0.ModelViews {
     public class RequestUserModelView : INotifyPropertyChanged {
         private List<string> _newIndex = Enumerable.Repeat("", 9).ToList();
         private Visibility _commVisibility;
         private List<string> _groupsIndex = RefbookModelView.HierarchyDataSet.Tables["TypesOfIndex"].AsEnumerable().Select(x => x.Field<string>("NameType")).ToList();
+        private ObservableCollection<string> _arrComment = new ObservableCollection<string>(Enumerable.Repeat("-", 9).ToList());
+
+        public ObservableCollection<string> ArrComment {
+            get { return _arrComment; }
+            set { _arrComment = value; NotifyPropertyChanged(); }
+        }
+
 
         public event PropertyChangedEventHandler PropertyChanged;
         public RefbookModelView RefbookMV { get; set; }

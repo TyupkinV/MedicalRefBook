@@ -13,7 +13,7 @@ namespace MedicalRefbook2_0.Models
             string[] toupleLogPass = arrLoginPass as string[];
             try
             {
-                string connStr = string.Format("Host={0};Username={1};Password={2};Database={3};", Settings.Default.Host, toupleLogPass[0], toupleLogPass[1], Settings.Default.Database);
+                string connStr = string.Format("Host={0};Username={1};Password={2};Database={3};", Settings.Default.DevHost, toupleLogPass[0], toupleLogPass[1], Settings.Default.DevDb);
                 NpgsqlConnection connection = new NpgsqlConnection(connStr);
                 connection.Open();
                 if (connection.State == ConnectionState.Open)

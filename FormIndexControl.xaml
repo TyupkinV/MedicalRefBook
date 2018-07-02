@@ -7,7 +7,7 @@
              xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
              xmlns:local="clr-namespace:MedicalRefbook2_0"
              mc:Ignorable="d" 
-             d:DesignHeight="400" d:DesignWidth="350" DataContext="{Binding RelativeSource={RelativeSource Self}}">
+             d:DesignHeight="470" d:DesignWidth="350" DataContext="{Binding RelativeSource={RelativeSource Self}}">
     <UserControl.Resources>
         <Style x:Key="BaseStyle">
             <Setter Property="Control.Margin" Value="5 0 5 0"/>
@@ -28,80 +28,84 @@
             <Setter Property="IsReadOnly" Value="{Binding Path=ReadOnly}" />
         </Style>
     </UserControl.Resources>
-    <ScrollViewer>
-        <Grid>
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="*"/>
-                <ColumnDefinition Width="Auto"/>
-            </Grid.ColumnDefinitions>
-            <Grid.Resources>
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="Auto"/>
+        </Grid.ColumnDefinitions>
+        <Grid.Resources>
+            <Style TargetType="TextBox">
+                <Setter Property="Margin" Value="5 0 5 0"/>
+            </Style>
+        </Grid.Resources>
+        <StackPanel Grid.Column="0">
+            <Label Content="Индекс"/>
+            <TextBox Text="{Binding Path=ShortName, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+            <Label Content="Полное название"/>
+            <TextBox Text="{Binding Path=FullName}"/>
+            <Label Content="Группа"/>
+            <TextBox Text="{Binding Path=Group}" Style="{StaticResource ShowOrNot}"/>
+            <ComboBox ItemsSource="{Binding Path=ListGroup}" SelectedValue="{Binding SelectedGroup, Mode=TwoWay}">
+                <ComboBox.Style>
+                    <Style TargetType="ComboBox" BasedOn="{StaticResource BaseStyle}">
+                        <Style.Triggers>
+                            <DataTrigger Binding="{Binding ReadOnly}" Value="True">
+                                <Setter Property="Visibility" Value="Collapsed"/>
+                            </DataTrigger>
+                            <DataTrigger Binding="{Binding ReadOnly}" Value="False">
+                                <Setter Property="Visibility" Value="Visible"/>
+                                <Setter Property="Margin" Value="5 0 5 0"/>
+                            </DataTrigger>
+                        </Style.Triggers>
+                    </Style>
+                </ComboBox.Style>
+            </ComboBox>
+            <Label Content="Мера"/>
+            <TextBox Text="{Binding Path=Measure}"/>
+            <Label Content="Формула"/>
+            <wpfm:FormulaControl Formula="{Binding Path=IndexFormula}" Margin="5 0 5 0"
+                                      Height="60" Background="White">
+                <i:Interaction.Triggers>
+                    <i:EventTrigger EventName="MouseLeftButtonDown">
+                        <i:InvokeCommandAction Command="{Binding Path=EditorFormula}"/>
+                    </i:EventTrigger>
+                </i:Interaction.Triggers>
+            </wpfm:FormulaControl>
+            <Label Content="Описание"/>
+            <TextBox Text="{Binding Path=Description}"/>
+            <Label Content="Методы измерения"/>
+            <TextBox Text="{Binding Path=EquipMeasure}"/>
+            <Label Content="Среднее значение"/>
+            <TextBox Text="{Binding Path=Average}"/>
+            <Label Content="Дополнительная инофрмация"/>
+            <TextBox Text="{Binding Path=AdditionalInfo}"/>
+        </StackPanel>
+        <GridSplitter Visibility="{Binding CommentIndex}" Grid.Column="1" HorizontalAlignment="Left" Width="4" Background="LightGray"/>
+        <StackPanel Grid.Column="1" Visibility="{Binding CommentIndex}">
+            <StackPanel.Resources>
                 <Style TargetType="TextBox">
-                    <Setter Property="Margin" Value="5 0 5 0"/>
+                    <EventSetter Event="PreviewMouseLeftButtonDown" Handler="TextBox_MouseLeftButtonDown"/>
+                    <Setter Property="Margin" Value="6 0 3 0"/>
                 </Style>
-            </Grid.Resources>
-            <StackPanel Grid.Column="0">
-                <Label Content="Индекс"/>
-                <TextBox Text="{Binding Path=ShortName, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
-                <Label Content="Полное название"/>
-                <TextBox Text="{Binding Path=FullName}"/>
-                <Label Content="Группа"/>
-                <TextBox Text="{Binding Path=Group}" Style="{StaticResource ShowOrNot}"/>
-                <ComboBox ItemsSource="{Binding Path=ListGroup}" SelectedValue="{Binding SelectedGroup, Mode=TwoWay}">
-                    <ComboBox.Style>
-                        <Style TargetType="ComboBox" BasedOn="{StaticResource BaseStyle}">
-                            <Style.Triggers>
-                                <DataTrigger Binding="{Binding ReadOnly}" Value="True">
-                                    <Setter Property="Visibility" Value="Collapsed"/>
-                                </DataTrigger>
-                                <DataTrigger Binding="{Binding ReadOnly}" Value="False">
-                                    <Setter Property="Visibility" Value="Visible"/>
-                                    <Setter Property="Margin" Value="5 0 5 0"/>
-                                </DataTrigger>
-                            </Style.Triggers>
-                        </Style>
-                    </ComboBox.Style>
-                </ComboBox>
-                <Label Content="Мера"/>
-                <TextBox Text="{Binding Path=Measure}"/>
-                <Label Content="Формула"/>
-                <wpfm:FormulaControl Formula="{Binding Path=IndexFormula}" Margin="5 0 5 0"
-                                      Height="40" Background="White">
-                    <i:Interaction.Triggers>
-                        <i:EventTrigger EventName="MouseLeftButtonDown">
-                            <i:InvokeCommandAction Command="{Binding Path=EditorFormula}"/>
-                        </i:EventTrigger>
-                    </i:Interaction.Triggers>
-                </wpfm:FormulaControl>
-                <Label Content="Описание"/>
-                <TextBox Text="{Binding Path=Description}"/>
-                <Label Content="Методы измерения"/>
-                <TextBox Text="{Binding Path=EquipMeasure}"/>
-                <Label Content="Среднее значение"/>
-                <TextBox Text="{Binding Path=Average}"/>
-                <Label Content="Дополнительная инофрмация"/>
-                <TextBox Text="{Binding Path=AdditionalInfo}"/>
-            </StackPanel>
-            <GridSplitter Visibility="{Binding CommentIndex}" Grid.Column="1" HorizontalAlignment="Left" Width="4" Background="LightGray"/>
-            <StackPanel Grid.Column="1" Visibility="{Binding CommentIndex}">
-                <Label Content="Комментарий:"/>
-                <TextBox Text="{Binding ArrayComment[0]}"/>
-                <Label Content="Комментарий:"/>
-                <TextBox Text="{Binding ArrayComment[1]}"/>
-                <Label Content="Комментарий:"/>
-                <TextBox Text="{Binding ArrayComment[2]}"/>
-                <Label Content="Комментарий:"/>
-                <TextBox Text="{Binding ArrayComment[3]}" />
-                <Label Content="Комментарий:"/>
-                <TextBox Text="{Binding ArrayComment[4]}"/>
-                <Label Content="Комментарий:"/>
-                <TextBox Text="{Binding ArrayComment[5]}"/>
-                <Label Content="Комментарий:"/>
-                <TextBox Text="{Binding ArrayComment[6]}"/>
-                <Label Content="Комментарий:"/>
-                <TextBox Text="{Binding ArrayComment[7]}"/>
-                <Label Content="Комментарий:"/>
-                <TextBox Text="{Binding ArrayComment[8]}"/>
-            </StackPanel>
-        </Grid>
-    </ScrollViewer>
+            </StackPanel.Resources>
+            <Label Content="Комментарий:"/>
+            <TextBox Name="C0" Text="{Binding ArrayComment[0], Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+            <Label Content="Комментарий:"/>
+            <TextBox Name="C1" Text="{Binding ArrayComment[1], Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+            <Label Content="Комментарий:"/>
+            <TextBox Name="C2" Text="{Binding ArrayComment[2], Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+            <Label Content="Комментарий:"/>
+            <TextBox Name="C3" Text="{Binding ArrayComment[3], Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+            <Label Content="Комментарий:"/>
+            <TextBox Name="C4" Text="{Binding ArrayComment[4], Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+            <Label Content="Комментарий:" Margin="0 45 0 0"/>
+            <TextBox Name="C5" Text="{Binding ArrayComment[5], Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+            <Label Content="Комментарий:"/>
+            <TextBox Name="C6" Text="{Binding ArrayComment[6], Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+            <Label Content="Комментарий:"/>
+            <TextBox Name="C7" Text="{Binding ArrayComment[7], Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+            <Label Content="Комментарий:"/>
+            <TextBox Name="C8" Text="{Binding ArrayComment[8], Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+        </StackPanel>
+    </Grid>
 </UserControl>

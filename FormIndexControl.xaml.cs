@@ -3,6 +3,9 @@ using System.Windows.Controls;
 using System.Windows.Input;
 using System.Collections.Generic;
 using System.Data;
+using System;
+using System.Collections.ObjectModel;
+using System.Linq;
 
 namespace UControls {
 
@@ -10,6 +13,7 @@ namespace UControls {
         public FormIndexControl() {
             InitializeComponent();
         }
+
 
         #region propdps
 
@@ -112,16 +116,25 @@ namespace UControls {
         public static readonly DependencyProperty CommentIndexProperty =
             DependencyProperty.Register("CommentIndex", typeof(Visibility), typeof(FormIndexControl), new PropertyMetadata(defaultValue:Visibility.Collapsed));
 
-        public List<string> ArrayComment {
-            get { return (List<string>)GetValue(ArrayCommentProperty); }
+        public ObservableCollection<string> ArrayComment {
+            get { return (ObservableCollection<string>)GetValue(ArrayCommentProperty); }
             set { SetValue(ArrayCommentProperty, value); }
         }
         public static readonly DependencyProperty ArrayCommentProperty =
-            DependencyProperty.Register("ArrayComment", typeof(List<string>), typeof(FormIndexControl),
-                                        new PropertyMetadata(defaultValue:new List<string> {"-", "-", "-", "-", "-", "-", "-", "-", "-" }));
+            DependencyProperty.Register("ArrayComment", typeof(ObservableCollection<string>), typeof(FormIndexControl),
+                                        new PropertyMetadata(defaultValue:new ObservableCollection<string>(Enumerable.Repeat("-", 9).ToList())));
+
 
         #endregion
 
+        private void TextBox_MouseLeftButtonDown(object sender, MouseButtonEventArgs e) {
+            TextBox textBox = (TextBox)sender;
+            int index = (int)Char.GetNumericValue(textBox.Name[1]);
+            WindComm commWindow = new WindComm(textBox.Text, this, index) {
+                Owner = Application.Current.Windows[0]
+            };
+            commWindow.Show();
+        }
+    }
 
     }
-}

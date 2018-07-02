@@ -17,6 +17,7 @@ namespace MedicalRefbook2_0.ModelViews {
         private List<Button> _dependIndicesList;
         private List<string> _infoSelectedIndexList;
         private int _activeTabItem = 0;
+        private string _countIndex;
         #endregion
 
         #region props
@@ -24,6 +25,12 @@ namespace MedicalRefbook2_0.ModelViews {
 
         public ICommand NewIndexTab { get; set; }
         public ICommand EditIndexTab { get; set; }
+        public ICommand OpenSettings { get; set; }
+
+        public string CountIndex {
+            get { return _countIndex; }
+            set { _countIndex = value; NotifyPropertyChanged(); }
+        }
 
         public static DataSet HierarchyDataSet {
             get {
@@ -93,9 +100,17 @@ namespace MedicalRefbook2_0.ModelViews {
             StaticPropertyChanged += HandleStaticPropertyChanged;
             RefbookModel = new Models.RefbookModel(this);
             HierarchyDataSet = RefbookModel.CreateHierarchy();
-
+            CountIndex = RefbookModel.CountIndex(HierarchyDataSet);
             NewIndexTab = new DelegateCommand(ActivateNewIndexTab);
             EditIndexTab = new DelegateCommand(ActivateEditIndexTab);
+            OpenSettings = new DelegateCommand(GetSettings);
+        }
+
+        private void GetSettings(object obj) {
+            Views.Settings winSettings = new Views.Settings {
+                Owner = App.Current.Windows[0]
+            };
+            winSettings.Show();
         }
 
         private void ActivateEditIndexTab(object obj) {

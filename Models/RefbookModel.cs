@@ -4,7 +4,6 @@ using System.Data;
 using System.Windows;
 using System.Collections.Generic;
 using System.Windows.Controls;
-using MedicalRefbook2_0.Properties;
 using System.Linq;
 using MedicalRefbook2_0.ModelViews;
 
@@ -19,7 +18,6 @@ namespace MedicalRefbook2_0.Models {
         }
 
         public DataSet CreateHierarchy() {
-
             try {
                 NpgsqlConnection connectDb = new NpgsqlConnection(((App)Application.Current).ConnectionString);
                 connectDb.Open();
@@ -42,6 +40,10 @@ namespace MedicalRefbook2_0.Models {
                 MessageBox.Show(ex.Message);
                 return null;
             }
+        }
+
+        public string CountIndex(DataSet allData) {
+            return allData.Tables["Refbook"].Rows.Count.ToString();
         }
 
         // Отступ от MVVM #1

@@ -13,8 +13,8 @@ namespace MedicalRefbook2_0.ModelViews
         private bool _IsAuth = false;
         private string _selectedServer = "Локальный";
 
-        public string Username { get; set; } = "postgres";
-        public string Password { get; set; } = "root";
+        public string Username { get; set; } = Properties.Settings.Default.DevUser;
+        public string Password { get; set; } = Properties.Settings.Default.DevPass;
         public List<string> TypeServer { get; } = new List<string> { "Локальный", "Удаленный" };
         public string SelectedServer { get { return _selectedServer; } set { _selectedServer = value; NotifyPropertyChanged(); } }
         public Models.AuthModel AuthModelP { get; set; }

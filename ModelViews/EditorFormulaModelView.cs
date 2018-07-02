@@ -40,6 +40,7 @@ namespace MedicalRefbook2_0.ModelViews {
         public ICommand CommandCommit { get; set; }
         public ICommand CommandCancel { get; set; }
         public ICommand ChangeStateCommand { get; set; }
+        public ICommand CheckDigits { get; set; }
 
         public List<string> AllStateFormula { get; set; } = new List<string>();
         public int IDCurrState { get; set; } = 0;
@@ -111,25 +112,13 @@ namespace MedicalRefbook2_0.ModelViews {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
 
-        public EditorFormulaModelView(RequestUserModelView requestUserMV) {
-            RequestUserMV = requestUserMV;
-            StartStateFormula = requestUserMV.NewIndex[4];
-            FracCommand = new DelegateCommand(Frac);
-            PlusMinusMultiplBrackCommand = new DelegateCommand(PlusMinusMultuplBracket);
-            OpenDialogBoxCommand = new DelegateCommand(OpenDialogBox);
-            CloseDialogBoxCommand = new DelegateCommand(CloseDialogBox);
-            CommandCommit = new DelegateCommand(QuitOk);
-            CommandCancel = new DelegateCommand(QuitCancel);
-            ChangeStateCommand = new DelegateCommand(ChangeState);
-            
-
-            EditorFormulaM = new Models.EditorFormulaModel();
-            DbIndex = EditorFormulaM.FillCBoxIndex(@"SELECT ""ShortName"", ""FullName"" FROM ""Refbook"";");
-            UserIndex = EditorFormulaM.FillCBoxIndex(@"SELECT ""ShortName"", ""FullName"" FROM ""RequestUser"" WHERE ""IDUser"" = 1;");
-        }
-
         private void ChangeState(object obj) {
-            
+            if(obj.ToString() == "Next") {
+
+            }
+            else {
+
+            }
         }
 
         private void OpenDialogBox(object obj) {
@@ -192,9 +181,27 @@ namespace MedicalRefbook2_0.ModelViews {
 
         #endregion
 
+        public EditorFormulaModelView(RequestUserModelView requestUserMV) {
+            RequestUserMV = requestUserMV;
+            StartStateFormula = requestUserMV.NewIndex[4];
+            FracCommand = new DelegateCommand(Frac);
+            PlusMinusMultiplBrackCommand = new DelegateCommand(PlusMinusMultuplBracket);
+            OpenDialogBoxCommand = new DelegateCommand(OpenDialogBox);
+            CloseDialogBoxCommand = new DelegateCommand(CloseDialogBox);
+            CommandCommit = new DelegateCommand(QuitOk);
+            CommandCancel = new DelegateCommand(QuitCancel);
+            ChangeStateCommand = new DelegateCommand(ChangeState);
+            CheckDigits = new DelegateCommand(CheckInputUser);
 
 
+            EditorFormulaM = new Models.EditorFormulaModel();
+            DbIndex = EditorFormulaM.FillCBoxIndex(@"SELECT ""ShortName"", ""FullName"" FROM ""Refbook"";");
+            UserIndex = EditorFormulaM.FillCBoxIndex(@"SELECT ""ShortName"", ""FullName"" FROM ""RequestsUser"" WHERE ""IDUser"" = 1;");
+        }
 
+        private void CheckInputUser(object obj) {
+            
+        }
     }
 
     #region Converters

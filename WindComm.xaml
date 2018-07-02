@@ -1,0 +1,16 @@
+﻿<Window x:Class="UControls.WindComm"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:UControls"
+        mc:Ignorable="d"
+        Title="Комментарий" Height="200" Width="300">
+    <Grid>
+        <TextBox Name="CommTbox" Height="130" Margin="5" VerticalAlignment="Top"/>
+        <WrapPanel VerticalAlignment="Bottom" HorizontalAlignment="Right">
+            <Button Name="Ok" Content="Ок" Height="20" Width="80" Margin="5" Click="Ok_Click"/>
+            <Button Name="Cancel" Content="Отменить" Height="20" Width="80" Margin="5" Click="Cancel_Click"/>
+        </WrapPanel>
+    </Grid>
+</Window>

@@ -9,7 +9,7 @@
         xmlns:uc="clr-namespace:UControls"
         xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
         mc:Ignorable="d"
-        Title="MainWindow" Height="560" Width="600">
+        Title="Справочник медицинских показателей" Height="620" Width="600">
     <Grid>
         <Grid>
             <Grid.RowDefinitions>
@@ -17,7 +17,7 @@
                 <RowDefinition Height="25"/>
             </Grid.RowDefinitions>
             <TabControl Grid.Row="0" SelectedItem="0" SelectedIndex="{Binding RefbookMV.ActiveTabItem, Mode=TwoWay}">
-            <TabItem Name="RefbookTabItem" Header="Справочник">
+                <TabItem Name="RefbookTabItem" Header="Справочник">
                     <Grid>
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="0.3*"/>
@@ -54,24 +54,25 @@
                                 <ItemsControl Name="DependIndicesICtrl" Height="auto" ItemsSource="{Binding Path=UsingIndicesList}" ItemsPanel="{StaticResource WrappingButton}"/>
                                 <Label Content="От чего зависит" />
                                 <ItemsControl Name="UsingIndicesICtrl" Height="auto" ItemsSource="{Binding Path=DependIndicesList}" ItemsPanel="{StaticResource WrappingButton}"/>
-                                <Button Content="Изменить показатель" Command="{Binding EditIndexTab}"/>
+                                <Button Content="Изменить показатель" Margin="2" Command="{Binding EditIndexTab}"/>
+                                <Button Name="toPDFBtn" Content="Выгрузка в PDF" Height="20" Margin="2" Click="toPDFBtn_Click"/>
                             </StackPanel>
                         </ScrollViewer>
                     </Grid>
                 </TabItem>
-            <TabItem Header="Граф" >
+                <TabItem Header="Граф" >
 
-            </TabItem> 
-            <TabItem Name="RequestUserTabItem" Header="Новая заявка">
-                <i:Interaction.Triggers>
-                    <i:EventTrigger EventName="MouseLeftButtonDown">
+                </TabItem>
+                <TabItem Name="RequestUserTabItem" Header="Новая заявка">
+                    <i:Interaction.Triggers>
+                        <i:EventTrigger EventName="MouseLeftButtonDown">
                             <i:InvokeCommandAction Command="{Binding RefbookMV.NewIndexTab}"/>
-                    </i:EventTrigger>
-                </i:Interaction.Triggers>
-                <Grid>
-                <Grid.ColumnDefinitions>
-                        <ColumnDefinition/>
-                    </Grid.ColumnDefinitions>
+                        </i:EventTrigger>
+                    </i:Interaction.Triggers>
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition/>
+                        </Grid.ColumnDefinitions>
                         <uc:FormIndexControl Margin="2,2,2,63" 
                                          CommentIndex="{Binding DataContext.CommVisibility, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type TabItem}}, Mode=TwoWay}"
                                          ReadOnly="False" EditorFormula="{Binding DataContext.CommandOpenEditor, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type TabItem}}, Mode=TwoWay}"
@@ -84,36 +85,67 @@
                                          Description="{Binding DataContext.NewIndex[5], RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type TabItem}}, Mode=TwoWay}"
                                          EquipMeasure="{Binding DataContext.NewIndex[6], RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type TabItem}}, Mode=TwoWay}"
                                          Average="{Binding DataContext.NewIndex[7], RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type TabItem}}, Mode=TwoWay}"
-                                         AdditionalInfo="{Binding DataContext.NewIndex[8], RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type TabItem}}, Mode=TwoWay}">
-                            <!--<uc:FormIndexControl.Triggers>
-                                <DataTrigger Binding="{Binding IndexFormula}" Value="{x:Static sys:String.Empty}">
-                                    <Setter Property="IndexFormula"  Value="Нажмите для редактирования."/>
-                                </DataTrigger>
-                            </uc:FormIndexControl.Triggers>-->
+                                         AdditionalInfo="{Binding DataContext.NewIndex[8], RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type TabItem}}, Mode=TwoWay}"
+                                         ArrayComment="{Binding DataContext.ArrComment, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type TabItem}}, Mode=TwoWay}">
+                                         
                         </uc:FormIndexControl>
-                    <Button Content="Отправить" Width="100" Height="25" VerticalAlignment="Bottom" HorizontalAlignment="Left" Command="{Binding CommandRequest}"/>
-                </Grid>
-            </TabItem>
-            <TabItem Name="AllRequestTabItem" Header="Заявки">
-
-            </TabItem>
-        </TabControl>
+                        <Button Content="Отправить" Width="100" Height="25" VerticalAlignment="Bottom" HorizontalAlignment="Left" Command="{Binding CommandRequest}"/>
+                    </Grid>
+                </TabItem>
+                <TabItem Name="AllRequestTabItem" Header="Заявки">
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="0.3*"/>
+                            <ColumnDefinition Width="0.7*"/>
+                        </Grid.ColumnDefinitions>
+                        <GridSplitter Grid.Column="0" BorderThickness="3" BorderBrush="DarkGray" VerticalAlignment="Stretch"/>
+                        <StackPanel Grid.Column="0">
+                            <TreeView Name="RequestTreeView" Margin="0 0 5 3">
+                                <TreeView.ItemTemplate>
+                                    <HierarchicalDataTemplate ItemsSource="{Binding IndexToType}">
+                                        <TextBlock Text="{Binding Path=NameType}" />
+                                        <HierarchicalDataTemplate.ItemTemplate>
+                                            <DataTemplate>
+                                                <TextBlock Text="{Binding Path=ShortName}" MouseLeftButtonDown="TextBlock_MouseLeftButtonDown_Request">
+                                                </TextBlock>
+                                            </DataTemplate>
+                                        </HierarchicalDataTemplate.ItemTemplate>
+                                    </HierarchicalDataTemplate>
+                                </TreeView.ItemTemplate>
+                            </TreeView>
+                        </StackPanel>
+                        <ScrollViewer HorizontalScrollBarVisibility="Disabled"  Grid.Column="1">
+                            <StackPanel>
+                                <StackPanel.Resources>
+                                    <ResourceDictionary>
+                                        <ResourceDictionary.MergedDictionaries>
+                                            <ResourceDictionary Source="ResourceInfoIndex.xaml"/>
+                                        </ResourceDictionary.MergedDictionaries>
+                                    </ResourceDictionary>
+                                </StackPanel.Resources>
+                                <uc:FormIndexControl ReadOnly="True" CommentIndex="Visible" Style="{StaticResource BindingControl}"
+                                                     ArrayComment="{Binding DataContext.CommIndexList, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type TabItem}}}"/>
+                                <Button Content="Принять заявку" Command="{Binding SolutionRequest}" CommandParameter="Accept"/>
+                                <Button Content="Отклонить заявку" Command="{Binding SolutionRequest}" CommandParameter="Decline"/>
+                            </StackPanel>
+                        </ScrollViewer>
+                    </Grid>
+                </TabItem>
+            </TabControl>
             <WrapPanel Grid.Row="1">
                 <WrapPanel.Resources>
                     <Style x:Key="localStyle">
                         <Setter Property="Control.Margin" Value="2"/>
                     </Style>
                 </WrapPanel.Resources>
-                <Button Content="Настройки" Width="80" Style="{StaticResource localStyle}"/>
+                <Button Content="Настройки" Width="80" Style="{StaticResource localStyle}" Command="{Binding RefbookMV.OpenSettings}"/>
                 <Button Content="Обновить"  Width="80" Style="{StaticResource localStyle}"/>
                 <TextBlock Text="Показателей в справочнике:" Style="{StaticResource localStyle}"/>
-                <TextBlock Text="5" Style="{StaticResource localStyle}" FontWeight="Bold"/>
+                <TextBlock Name="CountIndex" Style="{StaticResource localStyle}" FontWeight="Bold"/>
                 <TextBlock Text="Пользователь:" Style="{StaticResource localStyle}"/>
                 <TextBlock Text="Иван Иванов" Style="{StaticResource localStyle}" FontWeight="Bold"/>
                 <Button Content="Выйти"  Width="80" Style="{StaticResource localStyle}"/>
-
             </WrapPanel>
-
         </Grid>
     </Grid>
 </Window>

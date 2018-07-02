@@ -6,7 +6,7 @@
         xmlns:local="clr-namespace:MedicalRefbook2_0.Views"
         xmlns:uc="clr-namespace:UControls"
         mc:Ignorable="d"
-        Title="ReferenceIndexView" Height="450" Width="400">
+        Title="Информация о показателе" Height="450" Width="400">
     <Window.Resources>
         <Style x:Key="BindingControlLoc" TargetType="uc:FormIndexControl">
             <Setter Property="ShortName" Value="{Binding DataContext.InfoSelectedIndex[0], RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Window}}}"/>

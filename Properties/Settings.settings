@@ -14,5 +14,17 @@
     <Setting Name="Database" Type="System.String" Scope="User">
       <Value Profile="(Default)">MedicalRefbook</Value>
     </Setting>
+    <Setting Name="DevHost" Type="System.String" Scope="User">
+      <Value Profile="(Default)">tantor.db.elephantsql.com</Value>
+    </Setting>
+    <Setting Name="DevUser" Type="System.String" Scope="User">
+      <Value Profile="(Default)">ffvnmygz</Value>
+    </Setting>
+    <Setting Name="DevPass" Type="System.String" Scope="User">
+      <Value Profile="(Default)">XTLITR-uBhaK7-cZxFCiJHxPE1LrM2HZ</Value>
+    </Setting>
+    <Setting Name="DevDb" Type="System.String" Scope="User">
+      <Value Profile="(Default)">ffvnmygz</Value>
+    </Setting>
   </Settings>
 </SettingsFile>
